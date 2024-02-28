@@ -10,3 +10,7 @@
  * Next, join the film, inventory, rental, and customer tables.
  * Use a where clause to restrict results to the subquery.
  */
+
+/*subqeury*/
+
+select film.title, sum(payment.amount) as profit from film join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by film.title order by profit desc limit 5;

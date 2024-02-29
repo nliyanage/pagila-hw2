@@ -6,7 +6,12 @@
  * Use the film table and order by title.
  */
 
-SELECT ratings
-FROM film 
-
-ORDER BY title;
+select film_id, title 
+from film 
+where rating in
+(select rating from 
+(select rating, 
+	count (rating) 
+	from film 
+	group by rating 
+	order by count desc limit 2) as t1);

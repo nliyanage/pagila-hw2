@@ -14,4 +14,4 @@ where rating in
 	count (rating) 
 	from film 
 	group by rating 
-	order by count desc limit 2) as t1);
+	order by count desc limit 2) as t1) order by title;

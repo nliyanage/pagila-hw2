@@ -11,6 +11,36 @@
  * Use a where clause to restrict results to the subquery.
  */
 
+select distinct customer_id
+from customer
+join rental
+using (customer_id) 
+join inventory 
+using (inventory_id)
+join film
+using (film_id)
+where title in (select title
+from(
+select film.title,
+sum(payment.amount) as profit from film join inventory
+using (film_id)
+join rental
+using (inventory_id)
+join payment
+using (rental_id)
+group by film.title
+order by profit desc limit 5) as subquery) order by customer_id asc;
 /*subqeury*/
 
-select film.title, sum(payment.amount) as profit from film join inventory using (film_id) join rental using (inventory_id) join payment using (rental_id) group by film.title order by profit desc limit 5;
+/*select title
+from(
+select film.title, 
+sum(payment.amount) as profit from film join inventory 
+using (film_id) 
+join rental 
+using (inventory_id) 
+join payment 
+using (rental_id) 
+group by film.title 
+order by profit desc limit 5) as subquery;
+*/

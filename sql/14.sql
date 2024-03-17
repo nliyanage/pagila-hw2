@@ -5,3 +5,11 @@
  * This query is very similar to the previous problem,
  * but requires an additional JOIN.
  */
+
+SELECT EXTRACT(YEAR FROM rental_date) AS "Year",
+       EXTRACT(MONTH FROM rental_date) AS "Month",
+       SUM(payment.amount) AS "Total Revenue"
+FROM rental
+join payment  on rental.rental_id = payment.rental_id
+GROUP BY ROLLUP("Year","Month")
+ORDER BY "Year", "Month";

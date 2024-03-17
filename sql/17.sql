@@ -8,3 +8,14 @@
  * You might find the following stackoverflow answer useful for figuring out the syntax:
  * <https://stackoverflow.com/a/5700744>.
  */
+select rank, title, revenue, sum(revenue) over (order by rank) as "total revenue" from (
+    select RANK() OVER (ORDER BY revenue DESC) as rank, title, revenue from(
+        select film.title,
+        COALESCE(SUM(payment.amount), 0.00) as revenue from film
+        LEFT JOIN inventory USING (film_id)
+        LEFT JOIN rental USING (inventory_id)
+        LEFT JOIN payment USING (rental_id)
+        group by film.title
+    ) as subquery
+) as outerquery
+order by revenue desc, title;

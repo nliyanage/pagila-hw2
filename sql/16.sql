@@ -9,3 +9,9 @@
  * You can find examples of how to use the `rank` function at
  * <https://www.postgresqltutorial.com/postgresql-window-function/postgresql-rank-function/>.
  */
+select RANK() OVER (order by COALESCE(sum(payment.amount), 0.00) desc) as rank, title, COALESCE(sum(payment.amount), 0.00) as revenue from film
+LEFT JOIN inventory USING (film_id)
+LEFT JOIN rental USING (inventory_id)
+LEFT JOIN payment USING (rental_id)
+GROUP BY title
+ORDER BY rank, revenue DESC;
